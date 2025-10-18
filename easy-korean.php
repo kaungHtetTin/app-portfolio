@@ -1,3 +1,43 @@
+<?php 
+include('connect.php');
+$major = 'korea';
+
+$DB = new Database();
+
+$query ="SELECT count(*) as user_count FROM ko_user_datas";
+$user_count = $DB->read($query);
+$user_count = $user_count[0]['user_count'];
+
+$query = "SELECT count(*) as lesson_count FROM lessons WHERE major = '$major'";
+$lesson_count = $DB->read($query);
+$lesson_count = $lesson_count[0]['lesson_count'];
+
+$query = "SELECT count(*) as course_count FROM courses WHERE major = '$major'";
+$course_count = $DB->read($query);
+$course_count = $course_count[0]['course_count'];
+
+$query = "
+    SELECT 
+    ratings.review,
+    learners.learner_name,
+    learners.learner_image,
+    learners.region
+    FROM `ratings`
+    JOIN learners ON
+    learners.learner_phone = ratings.user_id
+    JOIN courses ON 
+    courses.course_id = ratings.course_id
+    WHERE star = 5 
+    AND review != '' 
+    AND LENGTH(review) > 30
+    AND courses.major = '$major'
+    ORDER BY ratings.id DESC;
+";
+$reviews = $DB->read($query);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="my">
 
@@ -5,10 +45,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Korean</title>
+    <link rel="icon" type="image/png" href="assets/seal.png">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&display=swap"
         rel="stylesheet">
@@ -150,9 +194,12 @@
         .testimonial-img {
             width: 70px;
             height: 70px;
+            display: block;
+            margin: 0 auto 15px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 15px;
+            -o-object-fit: cover; /* legacy Opera */
+            overflow: hidden;
         }
 
         .footer {
@@ -301,6 +348,31 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Owl Carousel tweaks */
+        /* tighten item padding so items don't push outside the section */
+        .owl-carousel .item {
+             
+        }
+
+        .owl-carousel .testimonial-card {
+            margin: 0 10px;
+        }
+
+        /* center nav dots color */
+        .owl-dots {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+    /* Custom layout for testimonials */
+    .testimonials-wrapper { position: relative; padding: 0 24px; box-sizing: border-box; }
+
+    /* hide any transformed overflow to avoid visual bleeding */
+    .testimonials-wrapper .owl-stage-outer { overflow: hidden; }
+
+        /* testimonial nav buttons removed — no extra padding required */
+        .testimonials-wrapper .owl-carousel { padding: 0; box-sizing: border-box; }
     </style>
 </head>
 
@@ -342,7 +414,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 hero-content">
                     <h1 class="display-4 fw-bold mb-4">ကိုရီးယားစကားကို လွယ်ကူစွာ သင်ယူလိုက်ပါ</h1>
-                    <p class="lead mb-4">မြန်မာလူငယ်တွေအတွက် အထူးပြုလုပ်ထားတဲ့ ကိုရီးယားစာ သင်ကြားရေး App</p>
+                    <p class="lead mb-4">မြန်မာပြည်ရဲ့ အကောင်းဆုံး ကိုရီးယားစာသင်ကြားရေး Application</p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="#download" class="btn btn-light btn-lg px-4 py-2 fw-bold">အခမဲ့ စမ်းသုံးကြည့်ပါ</a>
                         <a href="#testimonials" class="btn btn-outline-light btn-lg px-4 py-2">အသုံးပြုသူများ၏
@@ -352,7 +424,7 @@
                 <div class="col-lg-6 text-center">
                     <div class="app-mockup">
                         <img src="assets/photo_1.jpg"
-                            alt="KoreaLearn App" class="img-fluid rounded shadow-lg">
+                            alt="Easy Korean App" class="img-fluid rounded shadow-lg">
                     </div>
                 </div>
             </div>
@@ -364,19 +436,19 @@
         <div class="container">
             <div class="row text-center">
                 <div class="col-md-3 col-6 mb-4">
-                    <div class="stats-number">၁၀,၀၀၀+</div>
+                    <div class="stats-number"><?= $user_count ?></div>
                     <div class="stats-label">အသုံးပြုသူများ</div>
                 </div>
                 <div class="col-md-3 col-6 mb-4">
-                    <div class="stats-number">၅၀၀+</div>
+                    <div class="stats-number"><?= $lesson_count ?></div>
                     <div class="stats-label">သင်ခန်းစာများ</div>
                 </div>
                 <div class="col-md-3 col-6 mb-4">
-                    <div class="stats-number">၉၈%</div>
-                    <div class="stats-label">အောင်မြင်မှုနှုန်း</div>
+                    <div class="stats-number"><?= $course_count  ?></div>
+                    <div class="stats-label">သင်တန်းများ</div>
                 </div>
                 <div class="col-md-3 col-6 mb-4">
-                    <div class="stats-number">၂၄/၇</div>
+                    <div class="stats-number">24/7</div>
                     <div class="stats-label">သင်ယူနိုင်ခြင်း</div>
                 </div>
             </div>
@@ -389,33 +461,31 @@
             <div class="row">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <h2 class="section-title">ကိုရီးယားစာသင်ရတာ ခက်ခဲလွန်းတယ်လား?</h2>
-                    <p class="mb-4">မြန်မာလူငယ်အများစုအတွက် ကိုရီးယားဘာသာစကားသင်ယူရာတွင် အောက်ပါအခက်အခဲများရှိပါသည် -
+                    <p class="mb-4">ကိုရီးယားဘာသာစကားသင်ယူရာတွင် အောက်ပါအခက်အခဲများရှိပါသည် -
                     </p>
                     <ul class="list-unstyled">
                         <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> သင်ခန်းစာများက
-                            မြန်မာလူငယ်များအတွက် မသင့်တော်ခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> EPS-TOPIK အတွက် ထိရောက်သော
-                            သင်ယူနည်းမရှိခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> မြန်မာဘာသာဖြင့်
-                            ရှင်းလင်းချက်မရှိခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> အင်တာနက်မရှိလျှင်
-                            သင်ယူ၍မရခြင်း</li>
+                            မြန်မာလူငယ်များအတွက် မသင့်လျော်ခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> စျေးသက်သက်သာသာဖြင့် Advance Level အထိရောက်အောင် သင်ကြားနိုင်မှုမရှိခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> မိမိနေထိုင်ရာမြို့/ရွာ/ဒေသများတွင် သင်တန်းကောင်းများမရှိခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> သင်တန်းကျောင်းသို့နေစဉ်သွားတက်ရန် အချိန်မပေးနိုင်ခြင်း</li>
                     </ul>
                 </div>
                 <div class="col-lg-6">
-                    <h2 class="section-title">KoreaLearn ဖြေရှင်းပေးမည်</h2>
-                    <p class="mb-4">KoreaLearn သည် မြန်မာလူငယ်များအတွက် အထူးဒီဇိုင်းပြုလုပ်ထားသော
+                    <h2 class="section-title">Easy Korean ဖြေရှင်းပေးမည်</h2>
+                    <p class="mb-4">Easy Korean သည် မြန်မာလူငယ်များအတွက် အထူးပြုလုပ်ထားသော
                         ကိုရီးယားဘာသာစကားသင်ယူရေး application ဖြစ်ပါသည်။</p>
                     <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>မြန်မာလို
-                                ရှင်းလင်းချက်များ</strong> - လွယ်ကူရှင်းလင်းသော မြန်မာဘာသာဖြင့် သင်ယူနိုင်သည်</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>EPS-TOPIK အတွက်
-                                သင်ရိုးညွှန်းတမ်း</strong> - ကိုရီးယားအလုပ်သွားရန် လိုအပ်သော စာမေးပွဲအတွက် ပြင်ဆင်ပေးသည်
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>သင်ကြားမည့်ပုံစံ</strong> 
+                        - ကြည်လင်ပြတ်သားပြီး အရည်အသွေးကောင်းမွန်သော Video သင်ခန်းစာများဖြင့် Easy Korean Application တွင်ဝင်ရောက်လေ့လာနိုင်ခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>ဘာတွေသင်ကြားပေးမှာလဲ </strong> - 
+                        Basic မှာစ၍ Level 4 အထိကို နာမည်ကြီး Yonsei Textbook အတိုင်း သင်ကြားပေးခြင်းနှင့် Topik 1 စာမေးပွဲအတွက် လေ့လာသင်ကြားနိုင်ခြင်း
                         </li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>မြန်မာ-ကိုရီးယား
-                                နှစ်ဘာသာဖြင့်</strong> - နှစ်ဘာသာဖြင့် နားလည်လွယ်စေရန် ပြုလုပ်ထားသည်</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>ဘယ်သူတွေလေ့လာသင့်လဲ </strong> - 
+                        အပြင်သင်တန်းတက်ရောက်ရန် အချိန်မပေးနိုင်သူများ၊ ကိုရီးယားနိုင်ငံတွင် အလုပ်သွားရန် စီစဉ်နေသူများ၊ ငွေကြေးသက်သာစွာဖြင့် ကိုရီးယားစာကို အဆင့်မြှင့်တင်လိုသူများ
+                        </li>
                         <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>အင်တာနက်မလိုဘဲ
-                                သင်ယူနိုင်ခြင်း</strong> - အင်တာနက်မရှိလျှင်လည်း သင်ယူနိုင်သည်</li>
+                                သင်ယူနိုင်ခြင်း</strong> - သင်ခန်းစာများအား Offline Download ဆွဲနိုင်သည့်အတွက် အင်တာနက်မရှိသည့်အခါများတွင်လည်း ‌လေ့လာနိုင်ခြင်း</li>
                     </ul>
                 </div>
             </div>
@@ -433,8 +503,10 @@
                             <i class="fas fa-language"></i>
                         </div>
                         <h4>မြန်မာလို ရှင်းလင်းချက်များ</h4>
-                        <p>လွယ်ကူရှင်းလင်းသော မြန်မာဘာသာဖြင့် ကိုရီးယားစကားကို သင်ယူနိုင်ပါသည်။ ခက်ခဲသော သဒ္ဒါများကို
-                            မြန်မာလိုရှင်းပြထားသည်။</p>
+                        <p>
+                            လွယ်ကူရှင်းလင်းသော မြန်မာဘာသာဖြင့် ကိုရီးယားစကားကို သင်ယူနိုင်ပါသည်။ ခက်ခဲသော သဒ္ဒါများကို
+                            မြန်မာလိုရှင်းပြထားသည်။
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-4">
@@ -442,9 +514,10 @@
                         <div class="feature-icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
-                        <h4>EPS-TOPIK သင်ရိုးညွှန်းတမ်း</h4>
-                        <p>ကိုရီးယားအလုပ်သွားရန် လိုအပ်သော EPS-TOPIK စာမေးပွဲအတွက် အထူးပြုလုပ်ထားသော
-                            သင်ရိုးညွှန်းတမ်းဖြင့် သင်ယူနိုင်ပါသည်။</p>
+                        <h4>Yonsei သင်ရိုးညွှန်းတမ်း</h4>
+                        <p>
+                            နာမည်ကြီး Yonsei တက္ကသိုလ်၏ ကိုရီးယားဘာသာစကား သင်ရိုးညွှန်းတမ်းအတိုင်း သင်ကြားပေးသည်။
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-4">
@@ -471,7 +544,8 @@
                             <i class="fas fa-globe-asia"></i>
                         </div>
                         <h4>ယဉ်ကျေးမှုများကို သိရှိခြင်း</h4>
-                        <p>ကိုရီးယားယဉ်ကျေးမှုများကို နားလည်ခြင်းဖြင့် ဘာသာစကားကို ပိုမိုနက်ရှိုင်းစွာ သိရှိနိုင်သည်။
+                        <p>
+                            ကိုရီးယားယဉ်ကျေးမှုများကို နားလည်ခြင်းဖြင့် ဘာသာစကားကို ပိုမိုနက်ရှိုင်းစွာ သိရှိနိုင်သည်။
                         </p>
                     </div>
                 </div>
@@ -491,7 +565,7 @@
     <!-- App Showcase Section -->
     <section class="section-padding">
         <div class="container">
-            <h2 class="text-center section-title">KoreaLearn Application</h2>
+            <h2 class="text-center section-title">Easy Korean Application</h2>
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="row g-4">
@@ -507,7 +581,7 @@
                 </div>
                 <div class="col-lg-6">
                     <h3 class="mb-4">လွယ်ကူသော အင်တာဖေ့စ်ဖြင့် သင်ယူပါ</h3>
-                    <p class="mb-4">KoreaLearn application သည် မြန်မာလူငယ်များအတွက် အထူးဒီဇိုင်းပြုလုပ်ထားသော
+                    <p class="mb-4">Easy Korean application သည် မြန်မာလူငယ်များအတွက် အထူးဒီဇိုင်းပြုလုပ်ထားသော
                         လွယ်ကူရှင်းလင်းသည့် အင်တာဖေ့စ်ဖြင့် ပြုလုပ်ထားသည်။</p>
                     <ul class="list-unstyled">
                         <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> ရှုပ်ထွေးမှုမရှိသော ဒီဇိုင်း
@@ -533,57 +607,206 @@
     <!-- Pricing Section -->
     <section id="pricing" class="section-padding bg-light-custom">
         <div class="container">
-            <h2 class="text-center section-title">သင့်အတွက် သင့်တော်သော စီမံချက်</h2>
-            <p class="text-center mb-5">အခမဲ့ဖြင့် စတင်ပါ။ ပိုမိုတိုးတက်မှုအတွက် Premium ကို အဆင့်မြှင့်ပါ။</p>
+            <h2 class="text-center section-title">Package Plan</h2>
+            <p class="text-center mb-5">Basic course နှင့် Additional သင်ခန်းစာပေါင်းများစွာကို အခမဲ့ စတင်သင်ယူနိင်ပါသည်</p>
 
             <div class="row justify-content-center">
                 <!-- Free Plan -->
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card pricing-card h-100">
                         <div class="card-body text-center p-4">
-                            <h4 class="card-title">အခမဲ့စီမံချက်</h4>
+                            <h4 class="card-title">Free Plan</h4>
                             <div class="price mb-4">
-                                <span class="h1">၀ ကျပ်</span>
-                                <span class="text-muted">/ လ</span>
+                                <span class="h2">0 MMK</span>
+                                 
                             </div>
                             <ul class="list-unstyled mb-4">
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> မိနစ် ၁၀
-                                    ဗီဒီယိုသင်ခန်းစာ ၅ ခု</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> အခြေခံ စကားလုံး ၁၀၀</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> နေ့စဉ်အသုံးဝင်စကားပြော
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Basic Course 
                                 </li>
-                                <li class="mb-3 text-muted"><i class="fas fa-times me-2"></i> EPS-TOPIK လေ့ကျင့်ခန်းများ
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i>
+                                    Vocabulary Course
                                 </li>
-                                <li class="mb-3 text-muted"><i class="fas fa-times me-2"></i>
-                                    ချက်ချင်းအဖြေမှန်စစ်ဆေးခြင်း</li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Songs With Lyrics 
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Vocabulary Game
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Korean Blog, Hanja, Number and Time
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Conversation, Words On Topics, Phrase
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Tips And Slangs, Useful Words
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Learning With K-drama
+                                </li>
+
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Drama Lyrics and Other Contents
+                                </li>
+
                             </ul>
                             <a href="#download" class="btn btn-outline-custom w-100">အခမဲ့ စတင်ရန်</a>
                         </div>
                     </div>
                 </div>
 
+                <!-- Free Plan -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card pricing-card h-100">
+                        <div class="card-body text-center p-4">
+                            <h4 class="card-title">Silver Plan</h4>
+                            <div class="price mb-4">
+                                <span class="h2">30,000 mmk</span>
+                                <span class="text-muted">/ lifetime</span>
+                            </div>
+                            <p class="text-muted">50,000 mmk သက်သာမည်</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    All assets in Free Plan
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 1 Course
+                                </li>
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 2 Course
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 2
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-times me-2"></i></i>
+                                        Level 4 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-times me-2"></i></i>
+                                        Level 4 Course Part 2
+                                </li>
+                                <li class="mb-3"><i class="fas fa-times me-2"></i></i>
+                                        Topik 1 Course
+                                </li>
+                            </ul>
+                            <a href="#download" class="btn btn-outline-custom w-100">အခမဲ့ စတင်ရန်</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Free Plan -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card pricing-card h-100">
+                        <div class="card-body text-center p-4">
+                            <h4 class="card-title">Gold Plan</h4>
+                            <div class="price mb-4">
+                                <span class="h2">40,000 mmk</span>
+                                <span class="text-muted">/ lifetime</span>
+                            </div>
+                            <p class="text-muted">80,000 mmk သက်သာမည်</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    All assets in Free Plan
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 1 Course
+                                </li>
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 2 Course
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 2
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 4 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 4 Course Part 2
+                                </li>
+                                <li class="mb-3"><i class="fas fa-times me-2"></i></i>
+                                        Topik 1 Course
+                                </li>
+                            </ul>
+                            <a href="#download" class="btn btn-outline-custom w-100">အခမဲ့ စတင်ရန်</a>
+                        </div>
+                    </div>
+                </div>
+                 
+
                 <!-- Pro Plan -->
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card pricing-card popular h-100">
                         <div class="popular-badge">အကြံပြုထားသည်</div>
                         <div class="card-body text-center p-4">
-                            <h4 class="card-title">Premium စီမံချက်</h4>
+                            <h4 class="card-title">Diamond Plan</h4>
                             <div class="price mb-4">
-                                <span class="h1">၃,၅၀၀ ကျပ်</span>
-                                <span class="text-muted">/ လ</span>
+                                <span class="h2">50,000 MMK</span>
+                                <span class="text-muted">/ lifetime</span>
                             </div>
-                            <p class="text-muted">(သို့) ၃၅,၀၀၀ ကျပ် / နှစ် (၅,၀၀၀ ကျပ် စျေးလျှော့)</p>
+                            <p class="text-muted">85,000 MMK သက်သာမည်</p>
                             <ul class="list-unstyled mb-4">
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Free Plan မှ
-                                    အခွင့်အရေးအားလုံး</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> EPS-TOPIK စာမေးပွဲအတွက်
-                                    သင်ခန်းစာနှင့် လေ့ကျင့်ခန်းများ အားလုံး</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> ဗီဒီယိုသင်ခန်းစာ
-                                    အားလုံးကို ကန့်သတ်ချက်မရှိ ကြည့်ရှုခွင့်</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i>
-                                    ချက်ချင်းအဖြေမှန်စစ်ဆေးခြင်း</li>
-                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i> အကြောင်းအရာအသစ်များကို
-                                    ဦးစွာရရှိခွင့်</li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    All assets in Free Plan
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 1 Course
+                                </li>
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 2 Course
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 3 Course Part 2
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 4 Course Part 1
+                                </li>
+
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Level 4 Course Part 2
+                                </li>
+                                <li class="mb-3"><i class="fas fa-check text-success me-2"></i></i>
+                                        Topik 1 Course
+                                </li>
                             </ul>
                             <a href="#download" class="btn btn-primary-custom w-100">Premium ကိုရယူရန်</a>
                         </div>
@@ -596,20 +819,19 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="section-padding">
         <div class="container">
-            <h2 class="text-center section-title">အသုံးပြုသူများ၏ ထင်မြင်ချက်များ</h2>
+            <h2 class="text-center section-title">အသုံးပြုသူများ၏ မှတ်ချက်များ</h2>
 
             <!-- Influencer Video Review -->
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="text-center mb-4">
-                        <span class="video-label"><i class="fas fa-star me-2"></i>Social Influencer ၏
-                            ရိုးသားထင်မြင်ချက်</span>
-                        <h3>KoreaLearn Application အား အမှန်တကယ်သုံးစွဲသူမှ သုံးသပ်ချက်</h3>
+                        <span class="video-label"><i class="fas fa-star me-2"></i> Nari's Honest Review</span>
+                        <h3>Easy Korean Application အား အသုံးပြုသူများ၏ မှတ်ချက်များ</h3>
                     </div>
                     <div class="video-container">
                         <div style="padding:56.25% 0 0 0;position:relative;">
                             <iframe
-                                src="https://player.vimeo.com/video/843769832?h=5d0578e19a&amp;badge=0&amp;autopause=0&amp;quality_selector=1&amp;player_id=0&amp;app_id=58479"
+                                src="https://player.vimeo.com/video/836210202?h=5036ec7717&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
                                 frameborder="0" allow="autoplay; fullscreen; picture-in-picture"
                                 style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:10px;"
                                 title="Easy English Honest Review"></iframe>
@@ -619,64 +841,52 @@
                 </div>
             </div>
 
-            <!-- Written Testimonials -->
+            <!-- Written Testimonials (Owl Carousel) -->
             <div class="row">
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card testimonial-card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="https://via.placeholder.com/70/FFA010/ffffff?text=MM" alt="User"
-                                class="testimonial-img">
-                            <h5 class="card-title">မောင်မောင်</h5>
-                            <p class="text-muted">ရန်ကုန်မြို့</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
+                <div class="col-12">
+                    <div class="testimonials-wrapper">
+                        <div class="owl-carousel owl-theme" id="testimonials-carousel">
+                        <?php if(empty($reviews)): ?>
+                        <div class="item">
+                            <div class="card testimonial-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <img src="https://via.placeholder.com/70" alt="User"
+                                        class="testimonial-img">
+                                    <h5 class="card-title">No testimonials yet</h5>
+                                    <p class="text-muted">Be the first to leave a review</p>
+                                    <div class="mb-3">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </div>
+                                    <p class="card-text">"No reviews available at the moment."</p>
+                                </div>
                             </div>
-                            <p class="card-text">"Premium သုံးပြီးတဲ့အခါ EPS-TOPIK ဖြေဖို့ ယုံကြည်ချက်တက်လာတယ်။ တစ်လကို
-                                ၃၅၀၀ ကျပ်ဆိုတာ ကိုရီးယားမှာ တစ်ရက်နေဖို့ထက် စျေးပိုချိုပါတယ်"</p>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card testimonial-card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="https://via.placeholder.com/70/FFA010/ffffff?text=SS" alt="User"
-                                class="testimonial-img">
-                            <h5 class="card-title">စုစုလှိုင်</h5>
-                            <p class="text-muted">မန္တလေးမြို့</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
+                        <?php else: ?>
+                        <?php foreach($reviews as $review):?>
+                        <div class="item">
+                            <div class="card testimonial-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <img style="width:70px; height:70px;" src="<?= $review['learner_image']?>" alt="User"
+                                        class="testimonial-img">
+                                    <h5 class="card-title"><?= $review['learner_name']?></h5>
+                                    <p class="text-muted"><?= $review['region']?></p>
+                                    <div class="mb-3">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </div>
+                                    <p class="card-text">"<?= $review['review']?>"</p>
+                                </div>
                             </div>
-                            <p class="card-text">"မြန်မာလိုရှင်းပြထားတဲ့အတွက် ကိုရီးယားစာသင်ရတာ အရမ်းလွယ်သွားတယ်။ အရင်က
-                                တခြားဆိုက်တွေသုံးရင် နားမလည်ဘူး။ KoreaLearn ကြောင့် ကိုရီးယားစကားပြောရဲလာတယ်"</p>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card testimonial-card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="https://via.placeholder.com/70/FFA010/ffffff?text=TT" alt="User"
-                                class="testimonial-img">
-                            <h5 class="card-title">ထွန်းထွန်းဦး</h5>
-                            <p class="text-muted">မွန်ပြည်နယ်</p>
-                            <div class="mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <p class="card-text">"အင်တာနက်မရှိလည်း သင်ယူလို့ရတဲ့ feature က အရမ်းကောင်းတယ်။
-                                ကျေးရွာမှာနေတဲ့အတွက် အင်တာနက်အဆင်မပြေတာများတယ်။ အခုဆို ဘယ်နေရာမှာဖြစ်ဖြစ်
-                                သင်ယူလို့ရသွားပြီ"</p>
-                        </div>
+                        <?php endforeach;?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -688,8 +898,8 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 mb-4 mb-lg-0">
-                    <h2 class="mb-3">ယခုပဲ KoreaLearn ကို စတင်သင်ယူလိုက်ပါ</h2>
-                    <p class="lead mb-4">မြန်မာလူငယ်ထောင်ပေါင်းများစွာ ယခုပင် KoreaLearn ဖြင့် ကိုရီးယားစကားကို
+                    <h2 class="mb-3">ယခုပဲ Easy Korean ကို စတင်သင်ယူလိုက်ပါ</h2>
+                    <p class="lead mb-4">မြန်မာလူငယ်ထောင်ပေါင်းများစွာ ယခုပင် Easy Korean ဖြင့် ကိုရီးယားစကားကို
                         သင်ယူနေပါပြီ</p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="#" class="btn btn-light btn-lg px-4 py-2 fw-bold">
@@ -702,8 +912,8 @@
                 </div>
                 <div class="col-lg-4 text-center">
                     <div class="app-mockup">
-                        <img src="https://via.placeholder.com/250x500/ffffff/FFA010?text=KoreaLearn"
-                            alt="KoreaLearn App" class="img-fluid">
+                        <img src="https://via.placeholder.com/250x500/ffffff/FFA010?text=Easy Korean"
+                            alt="Easy Korean App" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -715,7 +925,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
-                    <h4 class="mb-4">KoreaLearn</h4>
+                    <h4 class="mb-4">Easy Korean</h4>
                     <p>မြန်မာလူငယ်များအတွက် အထူးပြုလုပ်ထားသော ကိုရီးယားဘာသာစကားသင်ယူရေး application ဖြစ်ပါသည်။</p>
                     <div class="mt-4">
                         <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
@@ -725,20 +935,20 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                    <h5 class="mb-4">လင့်ခ်များ</h5>
+                    <h5 class="mb-4">Links</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#home" class="text-white text-decoration-none">ပင်မစာမျက်နှာ</a></li>
-                        <li class="mb-2"><a href="#features" class="text-white text-decoration-none">အားသာချက်များ</a>
+                        <li class="mb-2"><a href="#home" class="text-white text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="#features" class="text-white text-decoration-none">Features</a>
                         </li>
-                        <li class="mb-2"><a href="#pricing" class="text-white text-decoration-none">စျေးနှုန်း</a></li>
+                        <li class="mb-2"><a href="#pricing" class="text-white text-decoration-none">Pricing</a></li>
                         <li class="mb-2"><a href="#testimonials"
-                                class="text-white text-decoration-none">အသုံးပြုသူများ</a></li>
+                                class="text-white text-decoration-none">Testimonials</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                    <h5 class="mb-4">ဆက်သွယ်ရန်</h5>
+                    <h5 class="mb-4">Contact</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@korealearn.com</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@Easy Korean.com</li>
                         <li class="mb-2"><i class="fas fa-phone me-2"></i> 09 123 456 789</li>
                         <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> ရန်ကုန်မြို့၊ မြန်မာနိုင်ငံ</li>
                     </ul>
@@ -755,18 +965,96 @@
             <hr class="my-4 bg-light">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-0">&copy; 2023 KoreaLearn. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2023 Easy Korean. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
-                    <a href="#" class="text-white text-decoration-none me-3">ကိုယ်ရေးအချက်အလက်မူဝါဒ</a>
-                    <a href="#" class="text-white text-decoration-none">ဝန်ဆောင်မှုစည်းမျဉ်းများ</a>
+                    <a href="https://www.calamuseducation.com/calamus/privacy.php" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <a href="https://www.calamuseducation.com/calamus/term.php" class="text-white text-decoration-none">Terms of Use</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+ 
+        <!-- jQuery (required by Owl Carousel) -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>console.log('DEBUG: jQuery script tag present (easy-korean)');</script>
+        <!-- Owl Carousel JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+        <script>console.log('DEBUG: Owl script tag present (easy-korean)');</script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    (function(){
+        'use strict';
+        var info = function(){ if (window.console && console.info) console.info.apply(console, arguments); };
+
+        // small helper to wait for a condition with timeout
+        function waitFor(conditionFn, timeoutMs, intervalMs){
+            timeoutMs = timeoutMs || 4000; intervalMs = intervalMs || 150;
+            return new Promise(function(resolve, reject){
+                var start = Date.now();
+                (function poll(){
+                    try { if (conditionFn()) return resolve(); } catch(e){}
+                    if (Date.now() - start > timeoutMs) return reject(new Error('timeout'));
+                    setTimeout(poll, intervalMs);
+                })();
+            });
+        }
+
+        jQuery(function(){ // on DOM ready
+            info('testimonials: DOM ready — initializing');
+
+            waitFor(function(){ return typeof jQuery !== 'undefined' && typeof jQuery.fn.owlCarousel === 'function'; }, 5000, 200)
+            .then(function(){
+                var $tc = jQuery('#testimonials-carousel');
+                if (!$tc.length) { info('testimonials: carousel element not found'); return; }
+
+                if (!$tc.hasClass('owl-initialized')){
+                    $tc.owlCarousel({
+                        loop: true,
+                        margin: 10,
+                        nav: false,
+                        dots: true,
+                        autoplay: true,
+                        autoplayTimeout: 5000,
+                        autoplayHoverPause: true,
+                        responsive: { 0: { items:1 }, 768: { items:2 } }
+                    });
+                    info('testimonials: owl initialized');
+                } else {
+                    info('testimonials: owl already initialized');
+                }
+
+
+
+                // expose for debugging
+                window.testimonialsCarousel = $tc;
+
+                // IntersectionObserver refresh when section appears
+                try {
+                    var target = document.getElementById('testimonials');
+                    if (target && 'IntersectionObserver' in window) {
+                        var obs = new IntersectionObserver(function(entries){
+                            entries.forEach(function(entry){ if (entry.isIntersecting) { $tc.trigger('refresh.owl.carousel'); obs.disconnect(); } });
+                        }, { threshold: 0.05 });
+                        obs.observe(target);
+                    }
+                } catch(e){ info('testimonials: observer error', e); }
+
+                // debounced resize refresh
+                var resizeTimer = 0;
+                window.addEventListener('resize', function(){
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function(){
+                        if ($tc && $tc.length) { $tc.trigger('refresh.owl.carousel'); }
+                    }, 120);
+                });
+            })
+            .catch(function(){ info('testimonials: owl carousel plugin not available or timed out'); });
+        });
+    })();
+    </script>
     <script>
         // Fade-in on scroll using IntersectionObserver
         (function() {
