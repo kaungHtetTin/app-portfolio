@@ -35,6 +35,10 @@ $query = "
 ";
 $reviews = $DB->read($query);
 
+// fetch latest courses for the courses carousel (assume fields: course_id, course_title, price, cover_image)
+$query_courses = "SELECT c.course_id, c.title AS title, c.fee AS price, c.web_cover, rating as rating FROM courses c WHERE c.major = '$major' ORDER BY c.course_id;";
+$courses = $DB->read($query_courses);
+
 ?>
 
 
@@ -352,7 +356,7 @@ $reviews = $DB->read($query);
         /* Owl Carousel tweaks */
         /* tighten item padding so items don't push outside the section */
         .owl-carousel .item {
-             
+            padding: 8px 6px;
         }
 
         .owl-carousel .testimonial-card {
@@ -373,6 +377,48 @@ $reviews = $DB->read($query);
 
         /* testimonial nav buttons removed — no extra padding required */
         .testimonials-wrapper .owl-carousel { padding: 0; box-sizing: border-box; }
+
+    /* Courses carousel */
+    .courses-wrapper { position: relative; padding: 0 20px; box-sizing: border-box; }
+    .course-card { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.08); background: #fff; }
+    /* 16:9 media wrapper */
+    .course-media { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #f5f5f5; display:block; }
+    .course-media img.course-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .course-body { padding: 12px; }
+    .course-title { font-weight:700; font-size:1rem; margin-bottom:6px; }
+    .course-meta { display:flex; justify-content:space-between; align-items:center; font-size:0.95rem; gap:10px; }
+    .course-meta .left { display:flex; align-items:center; gap:8px; }
+    .course-meta .right { display:flex; align-items:center; gap:12px; }
+    .course-price { color: var(--primary-color); font-weight:700; }
+    .course-rating { color: #444; display:flex; align-items:center; gap:6px; }
+    .course-rating .star { color: #f6b042; }
+    @media (min-width: 1200px) {
+        .course-cover { height:160px; }
+    }
+    /* detail link (text + arrow) */
+    .course-detail-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 180ms ease, transform 180ms ease;
+    }
+    .course-detail-link .arrow {
+        display: inline-block;
+        transition: transform 180ms ease;
+    }
+    .course-detail-link:hover,
+    .course-detail-link:focus {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+    .course-detail-link:hover .arrow,
+    .course-detail-link:focus .arrow {
+        transform: translateX(4px);
+    }
+    .course-detail-link:focus { outline: 3px solid rgba(255,160,16,0.15); outline-offset: 3px; border-radius: 6px; }
     </style>
 </head>
 
@@ -393,6 +439,9 @@ $reviews = $DB->read($query);
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#courses">Courses</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#pricing">Pricing</a>
@@ -570,11 +619,11 @@ $reviews = $DB->read($query);
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="row g-4">
                         <div class="col-6">
-                            <img src="https://via.placeholder.com/250x500/f8f9fa/FFA010?text=Lesson+Screen"
+                            <img src="assets/photo_1.jpg"
                                 alt="Lesson Screen" class="img-fluid rounded shadow">
                         </div>
                         <div class="col-6">
-                            <img src="https://via.placeholder.com/250x500/f8f9fa/FFA010?text=Vocabulary"
+                            <img src="assets/photo_1.jpg"
                                 alt="Vocabulary Screen" class="img-fluid rounded shadow mt-5">
                         </div>
                     </div>
@@ -598,6 +647,59 @@ $reviews = $DB->read($query);
                     <div class="mt-4">
                         <a href="#download" class="btn btn-primary-custom me-3">ဒေါင်းလုဒ်ရယူရန်</a>
                         <a href="#testimonials" class="btn btn-outline-custom">အသုံးပြုသူများ၏ ထင်မြင်ချက်များ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="section-padding bg-light-custom">
+        <div class="container">
+            <h2 class="text-center section-title">Our Courses</h2>
+            <p class="text-center mb-4">Explore popular courses — swipe to browse.</p>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="courses-wrapper">
+                        <div class="owl-carousel owl-theme" id="courses-carousel">
+                            <?php if(empty($courses)): ?>
+                                <div class="item">
+                                    <div class="card course-card">
+                                        <img src="https://via.placeholder.com/400x200?text=No+Courses" class="course-cover" alt="No courses">
+                                        <div class="course-body">
+                                            <div class="course-title">No courses available</div>
+                                            <div class="course-meta">
+                                                <div class="course-price">N/A</div>
+                                                <div class="course-rating">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <?php foreach($courses as $c): ?>
+                                <div class="item">
+                                    <div class="card course-card h-100">
+                                        <a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="course-media" aria-label="View course: <?= htmlspecialchars($c['title']) ?>">
+                                            <img src="<?= htmlspecialchars($c['web_cover'] ?: 'https://via.placeholder.com/400x225') ?>" alt="<?= htmlspecialchars($c['title']) ?>" class="course-cover">
+                                        </a>
+                                        <div class="course-body">
+                                            <div class="course-title"><a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="text-dark text-decoration-none"><?= htmlspecialchars($c['title']) ?></a></div>
+                                            <div class="course-meta">
+                                                <div class="left">
+                                                    <div class="course-price"><?= htmlspecialchars($c['price'] ? number_format($c['price']) . ' MMK' : 'Free') ?></div>
+                                                </div>
+                                                <div class="right">
+                                                    <div class="course-rating"><span class="star"><i class="fas fa-star"></i></span> <?php $r = $c['rating'] ?: 0; echo '<span class="text-warning">' . number_format($r,1) . '</span>'; ?></div>
+                                                    <a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="course-detail-link" aria-label="View details for <?= htmlspecialchars($c['title']) ?>">View details <span class="arrow">→</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -902,17 +1004,17 @@ $reviews = $DB->read($query);
                     <p class="lead mb-4">မြန်မာလူငယ်ထောင်ပေါင်းများစွာ ယခုပင် Easy Korean ဖြင့် ကိုရီးယားစကားကို
                         သင်ယူနေပါပြီ</p>
                     <div class="d-flex flex-wrap gap-3">
-                        <a href="#" class="btn btn-light btn-lg px-4 py-2 fw-bold">
+                        <a href="https://play.google.com/store/apps/details?id=com.calamus.easykorean" class="btn btn-light btn-lg px-4 py-2 fw-bold">
                             <i class="fab fa-google-play me-2"></i> Google Play
                         </a>
-                        <a href="#" class="btn btn-light btn-lg px-4 py-2 fw-bold">
-                            <i class="fab fa-apple me-2"></i> App Store
+                        <a href="https://www.calamuseducation.com" class="btn btn-light btn-lg px-4 py-2 fw-bold">
+                            <i class="fab fa-apple me-2"></i> Web For IOS
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 text-center">
                     <div class="app-mockup">
-                        <img src="https://via.placeholder.com/250x500/ffffff/FFA010?text=Easy Korean"
+                        <img src="assets/photo_1.jpg"
                             alt="Easy Korean App" class="img-fluid">
                     </div>
                 </div>
@@ -924,43 +1026,45 @@ $reviews = $DB->read($query);
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-lg-5 mb-4 mb-lg-0">
                     <h4 class="mb-4">Easy Korean</h4>
                     <p>မြန်မာလူငယ်များအတွက် အထူးပြုလုပ်ထားသော ကိုရီးယားဘာသာစကားသင်ယူရေး application ဖြစ်ပါသည်။</p>
                     <div class="mt-4">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/easykoreancalamus" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.youtube.com/@calamuseducationmyanmar5078" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <!-- <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a> -->
+                        <a href="https://www.tiktok.com/@ekcalamus?_t=ZS-90dm6eBXj9B" class="social-icon"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                     <h5 class="mb-4">Links</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="#home" class="text-white text-decoration-none">Home</a></li>
                         <li class="mb-2"><a href="#features" class="text-white text-decoration-none">Features</a>
+                        </li>
+                        <li class="mb-2"><a href="#courses" class="text-white text-decoration-none">Courses</a>
                         </li>
                         <li class="mb-2"><a href="#pricing" class="text-white text-decoration-none">Pricing</a></li>
                         <li class="mb-2"><a href="#testimonials"
                                 class="text-white text-decoration-none">Testimonials</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <h5 class="mb-4">Contact</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@Easy Korean.com</li>
-                        <li class="mb-2"><i class="fas fa-phone me-2"></i> 09 123 456 789</li>
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> ရန်ကုန်မြို့၊ မြန်မာနိုင်ငံ</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> calamuseducation@gmail.com</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> 09688683805</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Yangon, Myanmar</li>
                     </ul>
                 </div>
-                <div class="col-lg-3">
+                <!-- <div class="col-lg-3">
                     <h5 class="mb-4">သတင်းလွှာစာရင်း</h5>
                     <p>အခမဲ့သင်ခန်းစာများနှင့် update များကို ရယူရန် သင့်အီးမေးလ်ကို ထည့်သွင်းပါ</p>
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="သင့်အီးမေးလ်">
                         <button class="btn btn-primary-custom" type="button">စာရင်းသွင်းရန်</button>
                     </div>
-                </div>
+                </div> -->
             </div>
             <hr class="my-4 bg-light">
             <div class="row align-items-center">
@@ -1007,10 +1111,9 @@ $reviews = $DB->read($query);
 
             waitFor(function(){ return typeof jQuery !== 'undefined' && typeof jQuery.fn.owlCarousel === 'function'; }, 5000, 200)
             .then(function(){
+                /* --- Testimonials init (existing) --- */
                 var $tc = jQuery('#testimonials-carousel');
-                if (!$tc.length) { info('testimonials: carousel element not found'); return; }
-
-                if (!$tc.hasClass('owl-initialized')){
+                if ($tc.length && !$tc.hasClass('owl-initialized')){
                     $tc.owlCarousel({
                         loop: true,
                         margin: 10,
@@ -1022,36 +1125,54 @@ $reviews = $DB->read($query);
                         responsive: { 0: { items:1 }, 768: { items:2 } }
                     });
                     info('testimonials: owl initialized');
-                } else {
-                    info('testimonials: owl already initialized');
                 }
-
-
-
-                // expose for debugging
                 window.testimonialsCarousel = $tc;
 
-                // IntersectionObserver refresh when section appears
-                try {
-                    var target = document.getElementById('testimonials');
-                    if (target && 'IntersectionObserver' in window) {
-                        var obs = new IntersectionObserver(function(entries){
-                            entries.forEach(function(entry){ if (entry.isIntersecting) { $tc.trigger('refresh.owl.carousel'); obs.disconnect(); } });
-                        }, { threshold: 0.05 });
-                        obs.observe(target);
-                    }
-                } catch(e){ info('testimonials: observer error', e); }
+                /* --- Courses init (new) --- */
+                var $cc = jQuery('#courses-carousel');
+                if ($cc.length && ! $cc.hasClass('owl-initialized')){
+                    $cc.owlCarousel({
+                        loop: false,
+                        margin: 12,
+                        nav: false,
+                        dots: true,
+                        autoplay: false,
+                        responsive: { 0: { items:1 }, 576: { items:2 }, 992: { items:3 } }
+                    });
+                    info('courses: owl initialized');
+                }
+                window.coursesCarousel = $cc;
 
-                // debounced resize refresh
+                // IntersectionObserver refresh when their sections appear
+                try {
+                    var tTarget = document.getElementById('testimonials');
+                    if (tTarget && 'IntersectionObserver' in window) {
+                        var tObs = new IntersectionObserver(function(entries){
+                            entries.forEach(function(entry){ if (entry.isIntersecting) { $tc.trigger('refresh.owl.carousel'); tObs.disconnect(); } });
+                        }, { threshold: 0.05 });
+                        tObs.observe(tTarget);
+                    }
+
+                    var cTarget = document.getElementById('courses');
+                    if (cTarget && 'IntersectionObserver' in window) {
+                        var cObs = new IntersectionObserver(function(entries){
+                            entries.forEach(function(entry){ if (entry.isIntersecting) { $cc.trigger('refresh.owl.carousel'); cObs.disconnect(); } });
+                        }, { threshold: 0.05 });
+                        cObs.observe(cTarget);
+                    }
+                } catch(e){ info('carousel: observer error', e); }
+
+                // debounced resize refresh for both
                 var resizeTimer = 0;
                 window.addEventListener('resize', function(){
                     clearTimeout(resizeTimer);
                     resizeTimer = setTimeout(function(){
                         if ($tc && $tc.length) { $tc.trigger('refresh.owl.carousel'); }
+                        if ($cc && $cc.length) { $cc.trigger('refresh.owl.carousel'); }
                     }, 120);
                 });
             })
-            .catch(function(){ info('testimonials: owl carousel plugin not available or timed out'); });
+            .catch(function(){ info('carousels: owl carousel plugin not available or timed out'); });
         });
     })();
     </script>
