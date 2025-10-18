@@ -687,11 +687,11 @@ $courses = $DB->read($query_courses);
                                             <div class="course-title"><a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="text-dark text-decoration-none"><?= htmlspecialchars($c['title']) ?></a></div>
                                             <div class="course-meta">
                                                 <div class="left">
-                                                    <div class="course-price"><?= htmlspecialchars($c['price'] ? number_format($c['price']) . ' MMK' : 'Free') ?></div>
+                                                    <div class="course-price"><?= htmlspecialchars($c['price'] ? number_format($c['price']) . ' mmk' : 'Free') ?></div>
                                                 </div>
                                                 <div class="right">
                                                     <div class="course-rating"><span class="star"><i class="fas fa-star"></i></span> <?php $r = $c['rating'] ?: 0; echo '<span class="text-warning">' . number_format($r,1) . '</span>'; ?></div>
-                                                    <a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="course-detail-link" aria-label="View details for <?= htmlspecialchars($c['title']) ?>">View details <span class="arrow">→</span></a>
+                                                    <a href="https://www.calamuseducation.com/calamus/course_detail.php?course_id=<?= urlencode($c['course_id']) ?>" class="course-detail-link" aria-label="View details for <?= htmlspecialchars($c['title']) ?>">Details <span class="arrow">→</span></a>
                                                 </div>
                                             </div>
                                         </div>
