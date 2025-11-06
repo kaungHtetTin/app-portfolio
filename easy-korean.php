@@ -452,6 +452,39 @@ $courses = $DB->read($query_courses);
         transform: translateX(4px);
     }
     .course-detail-link:focus { outline: 3px solid rgba(255,160,16,0.15); outline-offset: 3px; border-radius: 6px; }
+    
+    /* App Gallery Section */
+    .app-gallery {
+        background-color: var(--primary-very-light);
+    }
+    
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+        background: white;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 160, 16, 0.25);
+    }
+    
+    .gallery-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+    
+    @media (max-width: 576px) {
+        .gallery-item {
+            margin-bottom: 15px;
+        }
+    }
     </style>
 </head>
 
@@ -687,19 +720,24 @@ $courses = $DB->read($query_courses);
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h3 class="mb-4">လွယ်ကူသော အင်တာဖေ့စ်ဖြင့် သင်ယူပါ</h3>
-                    <p class="mb-4">Easy Korean application သည် မြန်မာလူငယ်များအတွက် အထူးဒီဇိုင်းပြုလုပ်ထားသော
-                        လွယ်ကူရှင်းလင်းသည့် အင်တာဖေ့စ်ဖြင့် ပြုလုပ်ထားသည်။</p>
+                    <h3 class="mb-4">Easy Korean Application ဖြင့် အခုပဲသင်ယူပါ ... </h3>
+                    <p class="mb-4">
+                        Easy Korean application အား ရိုးရှင်းလွယ်သူသော Layout Design များဖြင့် လေ့လာမှု အတွက်
+                        အဆင်ပြေချောမွေ့အောင် ပြုလုပ်ထားသည်။
+                    </p>
                     <ul class="list-unstyled">
                         <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> ရှုပ်ထွေးမှုမရှိသော ဒီဇိုင်း
                         </li>
-                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> မြန်မာဘာသာဖြင့် လမ်းညွှန်မှုများ
+                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> ကြည်လင်ပြတ်သားသော video နှင့် audio များ
                         </li>
-                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> စကားလုံးများကို အသံဖြင့်
-                            နားထောင်နိုင်ခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> သင်တန်းတိုင်းအတွက်
-                            လေ့ကျင့်ခန်းများ</li>
-                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> တိုးတက်မှုကို ခြေရာခံနိုင်ခြင်း
+                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> 
+                            Offline Download လုပ်နိုင်ခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i> 
+                            မိမိဗဟုသုတများကို ပြန်လည်မျှဝေနိုင်ခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-check text-primary me-2"></i>
+                            သူငယ်ချင်းအသစ်များရှာဖွေ၍ အတူတကွလေ့လာနိုင်ခြင်း
                         </li>
                     </ul>
                     <div class="mt-4">
@@ -872,7 +910,7 @@ $courses = $DB->read($query_courses);
                                         Topik 1 Course
                                 </li>
                             </ul>
-                            <a href="#download" class="btn btn-outline-custom w-100">အခမဲ့ စတင်ရန်</a>
+                             <a href="#download" class="btn btn-primary-custom w-100">Premium ကိုရယူရန်</a>
                         </div>
                     </div>
                 </div>
@@ -919,7 +957,7 @@ $courses = $DB->read($query_courses);
                                         Topik 1 Course
                                 </li>
                             </ul>
-                            <a href="#download" class="btn btn-outline-custom w-100">အခမဲ့ စတင်ရန်</a>
+                            <a href="#download" class="btn btn-primary-custom w-100">Premium ကိုရယူရန်</a>
                         </div>
                     </div>
                 </div>
@@ -1053,14 +1091,64 @@ $courses = $DB->read($query_courses);
         </div>
     </section>
 
+     <section id="gallery" class="section-padding app-gallery">
+        <div class="container">
+            <h2 class="text-center section-title">Application Photo Gallery</h2>
+            <p class="text-center mb-5">Leaning Style and App Design</p>
+            <div class="row">
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_2.jpg" alt="Easy English App Screenshot 1" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_3.jpg" alt="Easy English App Screenshot 2" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_4.jpg" alt="Easy English App Screenshot 3" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_5.jpg" alt="Easy English App Screenshot 4" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_6.jpg" alt="Easy English App Screenshot 5" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_7.jpg" alt="Easy English App Screenshot 6" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_8.jpg" alt="Easy English App Screenshot 7" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="gallery-item">
+                        <img src="assets/ek_9.jpg" alt="Easy English App Screenshot 8" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Download Section -->
     <section id="download" class="section-padding download-section">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 mb-4 mb-lg-0">
-                    <h2 class="mb-3">ယခုပဲ Easy Korean ကို စတင်သင်ယူလိုက်ပါ</h2>
-                    <p class="lead mb-4">မြန်မာလူငယ်ထောင်ပေါင်းများစွာ ယခုပင် Easy Korean ဖြင့် ကိုရီးယားစကားကို
-                        သင်ယူနေပါပြီ</p>
+                     <h2 class="mb-3">Download Easy Korean Application Now</h2>Korean
+                    <p class="lead mb-4">
+                        Easy Korean Application ကို အခုပဲ Download ရယူပြီး အခမဲ့သင်ခန်းစာများမှစတင်၍ လေ့လာလိုက်ပါ
+                    </p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="https://play.google.com/store/apps/details?id=com.calamus.easykorean" class="btn btn-light btn-lg px-4 py-2 fw-bold">
                             <i class="fab fa-google-play me-2"></i> Google Play
