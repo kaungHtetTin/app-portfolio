@@ -122,7 +122,40 @@ $courses = $DB->read($query_courses);
         .feature-icon {
             font-size: 2.5rem;
             color: var(--primary-color);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Compact features section */
+        #features.section-padding {
+            padding: 50px 0;
+        }
+
+        #features .section-title {
+            margin-bottom: 35px;
+        }
+
+        #features .feature-box {
+            padding: 20px 18px;
+        }
+
+        #features .feature-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        #features .feature-box p {
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        #features .feature-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        #features .row > [class*="col-"] {
+            margin-bottom: 1.5rem;
         }
 
         .pricing-card {
@@ -513,28 +546,47 @@ $courses = $DB->read($query_courses);
                     <p class="mb-4">အင်္ဂလိပ်ဘာသာစကားသင်ယူရာတွင် အောက်ပါအခက်အခဲများရှိပါသည် -
                     </p>
                     <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> သင်ခန်းစာများက
-                            မြန်မာလူငယ်များအတွက် မသင့်လျော်ခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> စျေးသက်သက်သာသာဖြင့် Advance Level အထိရောက်အောင် သင်ကြားနိုင်မှုမရှိခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> မိမိနေထိုင်ရာမြို့/ရွာ/ဒေသများတွင် သင်တန်းကောင်းများမရှိခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> သင်တန်းကျောင်းသို့နေစဉ်သွားတက်ရန် အချိန်မပေးနိုင်ခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i>
+                            သင်တန်းများစျေးကြီးလွန်းခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> 
+                            သင်တန်းတက်ရောက်ရန် သွားရလာရ ခက်ခဲခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> 
+                            ကိစ္စအမျိုးမျိုးကြောင့် အချိန်မပေးနိုင်ခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> 
+                            Video Class များတွင် သင်ခန်းစာများ ပြန့်ကြဲနေပြီး စနစ်တကျစီစဉ်ထားမှု မရှိခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> 
+                            သင်ထောက်ကူနည်းစနစ်များ၊ သင်ခန်းစာများစနစ်တကျမရှိခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i> 
+                            လေ့လာမှုပလန်မရှိသောကြောင့် Self-study လုပ်ရင်း လမ်းပျောက်သွားခြင်း
+                        </li>
                     </ul>
                 </div>
                 <div class="col-lg-6">
                     <h2 class="section-title">Easy English ဖြေရှင်းပေးမည်</h2>
-                    <p class="mb-4">Easy English သည် မြန်မာလူငယ်များအတွက် အထူးပြုလုပ်ထားသော
-                        အင်္ဂလိပ်ဘာသာစကားသင်ယူရေး application ဖြစ်ပါသည်။</p>
+                    <p class="mb-4">ဘယ်လိုဖြေရှင်းပေးမှာလဲဆိုတော့</p>
                     <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>သင်ကြားမည့်ပုံစံ</strong> 
-                        - ကြည်လင်ပြတ်သားပြီး အရည်အသွေးကောင်းမွန်သော Video သင်ခန်းစာများဖြင့် Easy English Application တွင်ဝင်ရောက်လေ့လာနိုင်ခြင်း</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>ဘာတွေသင်ကြားပေးမှာလဲ </strong> - 
-                        Basic မှာစ၍ Level 4 အထိကို နာမည်ကြီး Yonsei Textbook အတိုင်း သင်ကြားပေးခြင်းနှင့် Topik 1 စာမေးပွဲအတွက် လေ့လာသင်ကြားနိုင်ခြင်း
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i>
+                         <strong>သင်တန်းကြေး</strong> - မထင်မှတ်ထားလောက်အောင်သက်သာသော သင်တန်းကြေးဖြင့် တက်ရောက်နိုင်ခြင်း
                         </li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>ဘယ်သူတွေလေ့လာသင့်လဲ </strong> - 
-                        အပြင်သင်တန်းတက်ရောက်ရန် အချိန်မပေးနိုင်သူများ၊ ကိုရီးယားနိုင်ငံတွင် အလုပ်သွားရန် စီစဉ်နေသူများ၊ ငွေကြေးသက်သာစွာဖြင့် အင်္ဂလိပ်စာကို အဆင့်မြှင့်တင်လိုသူများ
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> 
+                        <strong>အချိန်</strong> - အချိန်မရွေး၊ နေရာမရွေးမှာလေ့လာနိုင်ခြင်း
                         </li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> <strong>အင်တာနက်မလိုဘဲ
-                                သင်ယူနိုင်ခြင်း</strong> - သင်ခန်းစာများအား Offline Download ဆွဲနိုင်သည့်အတွက် အင်တာနက်မရှိသည့်အခါများတွင်လည်း ‌လေ့လာနိုင်ခြင်း</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> 
+                        မိမိအားလပ်ချိန် အနည်းငယ်ပေးရုံဖြင့် လေ့လာနိုင်ခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> 
+                            <strong>Lesson Plan</strong> - သင်ခန်းစာများကို Category, Daily Plan အစရှိသဖြင့် စနစ်တကျစီစဉ်ပေးထားခြင်း
+                        </li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> 
+                            <strong>Free assets</strong> - အခမဲ့ သင်ထောက်ကူနည်းစနစ်၊ သင်ခန်းစာများစွာပါဝင်ခြင်း (Reading, Listening, Speaking, Songs with lyrics, Games and so on)
+                            လေ့လာမှုပလန်ကို နေ့အလိုက်ချထားပေးခြင်း
+                        </li>
+                         
                     </ul>
                 </div>
             </div>
@@ -544,67 +596,72 @@ $courses = $DB->read($query_courses);
     <!-- Features Section -->
     <section id="features" class="section-padding bg-light-custom">
         <div class="container">
-            <h2 class="text-center section-title">ကျွန်ုပ်တို့၏ ထူးခြားအားသာချက်များ</h2>
+            <h2 class="text-center section-title">Easy English Application Features</h2>
             <div class="row">
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="feature-box text-center">
                         <div class="feature-icon">
-                            <i class="fas fa-language"></i>
+                            💰 
                         </div>
-                        <h4>မြန်မာလို ရှင်းလင်းချက်များ</h4>
+                        <h4>စျေးနှုန်းသက်သာပြီး တစ်သက်တာ အသုံးပြုခွင့် (Lifetime Access)</h4>
                         <p>
-                            လွယ်ကူရှင်းလင်းသော မြန်မာဘာသာဖြင့် ကိုရီးယားစကားကို သင်ယူနိုင်ပါသည်။ ခက်ခဲသော သဒ္ဒါများကို
-                            မြန်မာလိုရှင်းပြထားသည်။
+                            လစဉ် (သိုမဟုတ်) Course အလိုက်ပေးရတဲ့ စျေးကြီးတဲ့ သင်တန်းကြေးတွေအစား၊ Easy English App ရဲ့ သင်ခန်းစာအားလုံးကို <strong>၃၀,၀၀၀ ကျပ်</strong> ဖြင့်သာ <strong>တစ်သက်တာ (Lifetime Access)</strong> အသုံးပြုခွင့် ရယူနိုင်ခြင်း
+                        </p>
+                        <p>
+                            <strong>အားသာချက်</strong> တစ်ခါသာ သင်တန်းကြေးသွင်းပြီး စိတ်ကြိုက် အချိန်ယူ လေ့လာနိုင်ပါတယ်။
                         </p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="feature-box text-center">
                         <div class="feature-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                           💯
                         </div>
-                        <h4>Yonsei သင်ရိုးညွှန်းတမ်း</h4>
+                        <h4>အခမဲ့ Basic Course (Zero မှ စတင်သူများအတွက်)</h4>
                         <p>
-                            နာမည်ကြီး Yonsei တက္ကသိုလ်၏ အင်္ဂလိပ်ဘာသာစကား သင်ရိုးညွှန်းတမ်းအတိုင်း သင်ကြားပေးသည်။
+                            Basic Course တစ်ခုလုံးကို <strong>လုံးဝအခမဲ့ (100% FREE)</strong> ပေးထားခြင်း
+                        </p>
+                        <p>
+                            <strong>အားသာချက်</strong> - ငွေကြေးမကုန်ဘဲ စတင်လေ့လာနိုင်ပြီး၊ App ရဲ့ သင်ကြားမှု အရည်အသွေးကို စမ်းသပ်ကြည့်နိုင်ပါတယ်။
                         </p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="feature-box text-center">
                         <div class="feature-icon">
-                            <i class="fas fa-volume-up"></i>
+                            📱
                         </div>
-                        <h4>မြန်မာအသံထွက်</h4>
-                        <p>ကိုရီးယားစကားလုံးများ၏ မှန်ကန်သောအသံထွက်ကို မြန်မာလို ဖတ်နည်းဖြင့် သင်ယူနိုင်ပါသည်။</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <h4>ဂိမ်းများနှင့် သင်ယူခြင်း</h4>
-                        <p>စိတ်ဝင်စားဖွယ် ဂိမ်းများနှင့် စကားလုံးများကို လွယ်ကူစွာ မှတ်မိနိုင်အောင် ပြုလုပ်ထားသည်။</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-globe-asia"></i>
-                        </div>
-                        <h4>ယဉ်ကျေးမှုများကို သိရှိခြင်း</h4>
+                        <h4>အင်တာနက်မလိုဘဲ အချိန်မရွေး လေ့လာနိုင်ခြင်း (Offline Learning)</h4>
+                        <p>App ထဲမှ Video Lesson များကို တစ်ခါဒေါင်းလုဒ်ဆွဲထားရုံဖြင့် အင်တာနက် (Data) မရှိသည့်တိုင် ပြန်လည်ကြည့်ရှု လေ့လာနိုင်ခြင်း</p>
                         <p>
-                            ကိုရီးယားယဉ်ကျေးမှုများကို နားလည်ခြင်းဖြင့် ဘာသာစကားကို ပိုမိုနက်ရှိုင်းစွာ သိရှိနိုင်သည်။
+                           <strong>အားသာချက်</strong> - ခရီးသွားချိန်၊ အလုပ်နားချိန်၊ ဒါမှမဟုတ် အင်တာနက် အဆင်မပြေသည့် နေရာများတွင်ပါ အလွယ်တကူ လေ့လာနိုင်ပါတယ်။
                         </p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="feature-box text-center">
                         <div class="feature-icon">
-                            <i class="fas fa-wifi"></i>
+                             🎶
                         </div>
-                        <h4>အင်တာနက်မလိုဘဲ သင်ယူနိုင်ခြင်း</h4>
-                        <p>အင်တာနက်မရှိလျှင်လည်း သင်ခန်းစာများကို ဒေါင်းလုဒ်လုပ်ပြီး သင်ယူနိုင်ပါသည်။</p>
+                        <h4>ပျော်ရွှင်စရာသင်ကြားမှုပုံစံများ (Songs with Lyrics, Games)</h4>
+                        <p> သင်ခန်းစာများအပြင်၊ အင်္ဂလိပ်သီချင်းများကို <strong>အင်္ဂလိပ်-မြန်မာ ၂ ဘာသာစာသားများဖြင့် </strong>နားထောင်ရင်း၊ စာလေ့လာနိုင်သော အခမဲ့ Feature တစ်ခုကို ထည့်သွင်းပေးထားခြင်း</p>
+                        <p>
+                           <strong>အားသာချက်</strong> - ပျင်းရိငြီးငွေ့စရာမလိုဘဲ၊ သီချင်းနားထောင်ရင်း စကားပြောနှင့် ဝေါဟာရများကို ပေါ့ပေါ့ပါးပါး လေ့လာနိုင်ပါတယ်
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-icon">
+                           📅
+                        </div>
+                        <h4>နေ့စဉ် လေ့လာနိုင်တဲ့ပလန် (Daily Study Plan)</h4>
+                        <p>
+                            App ထဲတွင် သင်ခန်းစာများကို Day-by-Day (နေ့အလိုက်) စနစ်တကျ စီစဉ်ချမှတ်ပေးထားသောကြောင့် လေ့လာရာတွင် လမ်းမပျောက်တော့ပဲ အစဉ်လိုက် လေ့လာသွားနိုင်ခြင်း
+                        </p>
+                        <p>
+                            <strong>အားသာချက်</strong> - ကိုယ့်ဘာသာကိုယ် Plan ဆွဲစရာမလိုဘဲ၊ App ရဲ့ လမ်းညွှန်မှုအတိုင်း နေ့စဉ် သင်ယူသွားရုံဖြင့် အင်္ဂလိပ်စာကိုကျွမ်းကျင်တတ်မြောက်စေမှာပါ။
+                        </p>
                     </div>
                 </div>
             </div>
