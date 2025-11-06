@@ -1145,7 +1145,7 @@ $courses = $DB->read($query_courses);
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 mb-4 mb-lg-0">
-                     <h2 class="mb-3">Download Easy Korean Application Now</h2>Korean
+                     <h2 class="mb-3">Download Easy Korean Application Now</h2>
                     <p class="lead mb-4">
                         Easy Korean Application ကို အခုပဲ Download ရယူပြီး အခမဲ့သင်ခန်းစာများမှစတင်၍ လေ့လာလိုက်ပါ
                     </p>
