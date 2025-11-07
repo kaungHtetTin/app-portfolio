@@ -538,7 +538,7 @@ $courses = $DB->read($query_courses);
                 </div>
                 <div class="col-lg-6 text-center">
                     <div class="app-mockup">
-                        <img src="assets/photo_1.jpg"
+                        <img src="assets/ek_1.png"
                             alt="Easy Korean App" class="img-fluid rounded shadow-lg">
                     </div>
                 </div>
@@ -710,11 +710,11 @@ $courses = $DB->read($query_courses);
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="row g-4">
                         <div class="col-6">
-                            <img src="assets/photo_1.jpg"
+                            <img src="assets/ek_2.png"
                                 alt="Lesson Screen" class="img-fluid rounded shadow">
                         </div>
                         <div class="col-6">
-                            <img src="assets/photo_1.jpg"
+                            <img src="assets/ek_3.png"
                                 alt="Vocabulary Screen" class="img-fluid rounded shadow mt-5">
                         </div>
                     </div>
