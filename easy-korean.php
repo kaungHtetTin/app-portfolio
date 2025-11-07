@@ -1160,7 +1160,7 @@ $courses = $DB->read($query_courses);
                 </div>
                 <div class="col-lg-4 text-center">
                     <div class="app-mockup">
-                        <img src="assets/photo_1.jpg"
+                        <img src="assets/ek_1.png"
                             alt="Easy Korean App" class="img-fluid">
                     </div>
                 </div>
